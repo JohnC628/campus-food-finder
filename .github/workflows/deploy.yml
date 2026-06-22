@@ -1,0 +1,53 @@
+name: Deploy Frontend to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main 
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: './client/package-lock.json' # 鎖定 client 的套件版本
+
+      # 指定在 client 資料夾底下安裝套件
+      - name: Install dependencies
+        working-directory: ./client
+        run: npm install
+
+      # 指定在 client 資料夾底下打包，並偷偷複製一份 404.html 騙過 GitHub
+      - name: Build
+        working-directory: ./client
+        run: |
+          npm run build
+          cp dist/index.html dist/404.html 
+
+      # 上傳的檔案路徑也要改成 ./client/dist
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './client/dist'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
