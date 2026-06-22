@@ -18,7 +18,7 @@ const routes = [
 const router = createRouter({
   // 關鍵修改：改用 Hash 模式 (會在網址加上 /#/)
   // 這是解決 GitHub Pages 找不到網頁 (404) 與白畫面的最佳解法
-  history: createWebHashHistory(),
+  history: createWebHashHistory(import.meta.env.BASE_URL),
   routes
 });
 
