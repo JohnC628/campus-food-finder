@@ -1,0 +1,20 @@
+# .gitignore
+
+# 忽略 Node.js 模組套件 (極度重要！)
+node_modules/
+client/node_modules/
+server/node_modules/
+
+# 忽略環境變數檔 (未來如果有放密碼的 .env 檔，絕對不能上傳)
+.env
+.env.local
+
+# 忽略前端打包後的產物
+client/dist/
+
+# 忽略作業系統產生的隱藏檔
+.DS_Store
+Thumbs.db
+
+# (選擇性) 如果你不想把本地測試的 SQLite 資料庫推上去，可以解除下面這行的註解
+# server/data/food_map.db
